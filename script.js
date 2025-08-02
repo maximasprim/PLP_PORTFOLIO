@@ -71,9 +71,10 @@ const typingTexts = [
     'Full Stack Developer',
     'Web Developer',
     'Software Engineer',
-    'AI Enthusiast',
+    'Artificial Intelligence Expert',
     'Problem Solver',
-    'Tech Innovator'
+    'Tech Innovator',
+    'Founder & CEO -AGRILINK'
 ];
 
 let textIndex = 0;
