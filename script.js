@@ -362,59 +362,572 @@ function showNotification(message, type = 'info') {
 }
 
 // Download CV Function
+// Download CV as PDF Function
 function downloadCV() {
-    // Create a temporary link to download CV
-    const link = document.createElement('a');
+    // Create a new jsPDF instance
+    // Since you want to avoid libraries, we'll use the browser's print-to-PDF functionality
     
-    // In a real implementation, you would have an actual CV file
-    // For demo purposes, we'll create a data URL with CV content
-    const cvContent = `Michael Maxwell Mwasame - Full Stack Developer
+    // Method 1: Create a formatted HTML content and use window.print()
+    const cvContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Michael Maxwell Mwasame - CV</title>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    max-width: 8.5in;
+                    margin: 0 auto;
+                    padding: 0.75in;
+                    line-height: 1.4;
+                    color: #000;
+                    font-size: 11pt;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .name {
+                    font-size: 18pt;
+                    font-weight: bold;
+                    color: #4472C4;
+                    letter-spacing: 2px;
+                    margin-bottom: 5px;
+                }
+                .contact-line {
+                    font-size: 10pt;
+                    margin-bottom: 3px;
+                }
+                .email-links {
+                    font-size: 9pt;
+                    color: #0066CC;
+                    margin-bottom: 15px;
+                }
+                .section-title {
+                    font-size: 12pt;
+                    font-weight: bold;
+                    color: #4472C4;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    margin: 20px 0 10px 0;
+                    border-bottom: none;
+                }
+                .education-item, .project-item, .experience-item {
+                    margin-bottom: 12px;
+                }
+                .project-title, .job-title {
+                    font-weight: bold;
+                    font-size: 11pt;
+                }
+                .project-subtitle {
+                    font-style: italic;
+                    color: #666;
+                    margin-bottom: 3px;
+                }
+                .date {
+                    float: right;
+                    font-weight: normal;
+                    font-size: 10pt;
+                }
+                .project-description, .job-description {
+                    font-size: 10pt;
+                    text-align: justify;
+                    margin-top: 3px;
+                    line-height: 1.3;
+                }
+                .github-link {
+                    color: #0066CC;
+                    font-size: 9pt;
+                }
+                ul {
+                    margin: 8px 0;
+                    padding-left: 20px;
+                }
+                li {
+                    margin-bottom: 3px;
+                    font-size: 10pt;
+                }
+                .skills-grid {
+                    display: block;
+                }
+                .skill-item {
+                    margin-bottom: 5px;
+                    font-size: 10pt;
+                }
+                .skill-category {
+                    font-weight: bold;
+                    display: inline;
+                }
+                .community-item {
+                    margin-bottom: 10px;
+                }
+                .community-title {
+                    font-weight: bold;
+                    font-size: 10pt;
+                }
+                .languages-section, .certifications-section {
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .lang-left, .cert-left {
+                    flex: 1;
+                }
+                .lang-right, .cert-right {
+                    flex: 1;
+                    text-align: right;
+                }
+                @media print {
+                    body { 
+                        margin: 0; 
+                        padding: 0.5in; 
+                        font-size: 10pt;
+                    }
+                    .name { font-size: 16pt; }
+                    .section-title { font-size: 11pt; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <div class="name">MICHAEL MAXWELL MWASAME</div>
+                <div class="contact-line">Kutus, Kenya | +254743493619</div>
+                <div class="email-links">
+                    <a href="mailto:michaelmwasame6@gmail.com">michaelmwasame6@gmail.com</a> | 
+                    <a href="https://linkedin.com/in/michaelmwasame">linkedin.com/in/michaelmwasame</a> | 
+                    <a href="https://github.com/maximasprim">github.com/maximasprim</a>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">EDUCATION</div>
+                <div class="education-item">
+                    • BS Computer Science, Kirinyaga University (Sep 2021 – April 2025)
+                </div>
+                <div class="education-item">
+                    • Teach2Give(The Jitu) (May 2024-August 2024)
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">SKILLS</div>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <span class="skill-category">Database:</span> PostgreSQL, MySQL, Supabase, Firebase, pgAdmin, Neon
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-category">Languages:</span> JavaScript, TypeScript, Python, Php, Scripting Languages (Html, Css, Scss, TailwindCss)
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-category">Frameworks:</span> Node.js, React.js, Hono, Drizzle-ORM, Laravel
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-category">Tooling:</span> Git/GitHub, Visual Studio, Vercel, Render, Azure, Figma, Docker (containerization)
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-category">On-Going Advancements:</span> Golang, Rust, Docker, Flutter
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">PROJECTS</div>
+                
+                <div class="project-item">
+                    <div class="project-title">
+                        Unified Property Management System – Full-Stack Development
+                        <span class="date">Jan 2025 – April 2025</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Developed a centralized platform for managing residential and commercial properties(Land, Vehicles, Houses) with comprehensive history information for each listed property. Implemented features like tenant management, fee tracking, secure authentication processing, and analytics dashboards for property managers. <a href="#" class="github-link">GitHub Link</a> | <a href="#" class="github-link">Deployed link</a>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-title">
+                        AgroMart AI – Full-Stack On-demand AI Integration
+                        <span class="date">June 2025</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Developed a smart agricultural digital marketplace connecting farmers, buyers, and agro-dealers. Integrated AI-powered product recommendations, dynamic pricing suggestions, secure user verification, and real-time messaging system. Engineered complete digital transformation for agro-products through a responsive web interface and mobile-first design. <a href="#" class="github-link">GitHub Link</a>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-title">
+                        Smart AI Poultry System – IoT integrated with AI
+                        <span class="date">July 2025</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Built an intelligent poultry management system to automate and optimize layer farming operations. Integrated advanced real-time monitoring, predictive analytics for production prediction, inventory tracking, and secured data storage. Delivered efficient layer management through a user-friendly web interface and mobile application. <a href="#" class="github-link">GitHub Link</a>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-title">
+                        Vehicle Rental System – Full-Stack Development
+                        <span class="date">May 2024-June 2024</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Developed a fully functional web application to manage vehicle rentals, enabling seamless booking and secure payment processing. Implemented features for user registration, vehicle browsing, real-time availability tracking, admin and customer dashboards, and Stripe-integrated transactions. <a href="#" class="github-link">GitHub Link</a> | <a href="#" class="github-link">Deployed link</a>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-title">
+                        Maximas AI Chatbot – Full-Stack Development
+                        <span class="date">June 2025</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Engineered a comprehensive AI chatbot application featuring robust user authentication, persistent conversation history (integrated from SQLite to PostgreSQL), and natural language processing. Implemented real-time conversational interface with user latency. <a href="#" class="github-link">GitHub Link</a> | <a href="#" class="github-link">Deployed link</a>
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-title">
+                        Chat App – Full-Stack Development
+                        <span class="date">Nov 2024</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Built a real-time messaging application with user authentication, group chats, message history, and multimedia support using Web Socket for seamless communication. Built using WebSocket for seamless communication with low latency. <a href="#" class="github-link">GitHub Link</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">EXPERIENCE</div>
+                
+                <div class="experience-item">
+                    <div class="project-title">
+                        Software Developer Trainee – Teach2Give(The Jitu), Nyeri Kenya
+                        <span class="date">April 2024 – June 2024</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        I am an experienced software developer with strong background in web development and cloud computing, specializing in React, Node.js, Hono, Django CRUD with PostgreSQL/MySQL. I have successfully built and deployed numerous full-stack applications, user analytics and manage servers. I actively engage in Agile methodologies, use Git for version control, and communicate effectively within teams to deliver quality software solutions. <a href="#" class="github-link">Link</a>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="project-title">
+                        Networking Engineer – Cyber Eyes Networks, Kirinyaga Kenya
+                        <span class="date">Jan 2024 – Feb 2025</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Designed and maintained secure network infrastructure, configured routers/switches, and provided technical support for optimal performance. Implemented security patches and resolved network traffic.
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="project-title">
+                        ICT Attaché – ICT Authority, Bungoma Kenya
+                        <span class="date">May 2023 – August 2023</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Supported government IT projects, assisted in system audits, and trained staff on cybersecurity protocols and hardware/software troubleshooting.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">LEADERSHIP AND COMMUNITY INVOLVEMENT</div>
+                
+                <div class="community-item">
+                    <div class="community-title">
+                        Web Development Lead – Computer Society of Kirinyaga
+                        <span class="date">September 2022 – 2023</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Lead a team of students in developing and maintaining the club's web system. Provided technical direction and ensured project execution aligned with club goals.
+                    </div>
+                </div>
+
+                <div class="community-item">
+                    <div class="community-title">
+                        Member – Nairobi DevOps Community
+                        <span class="date">2023 – Present</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Engaged in knowledge-sharing on DevOps tools (Docker, CI/CD) and collaborated on automation projects to streamline deployment workflows.
+                    </div>
+                </div>
+
+                <div class="community-item">
+                    <div class="community-title">
+                        ALX Kenya Program Participant
+                        <span class="date">2022 – 2024</span>
+                    </div>
+                    <div style="clear: both;"></div>
+                    <div class="project-description">
+                        Actively engaged in ALX's tech training programs, focusing on software development and leadership skills through peer learning and project-based challenges.
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">LANGUAGES</div>
+                <div class="languages-section">
+                    <div class="lang-left">English – Proficient</div>
+                    <div class="lang-right">Swahili – Native</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">CERTIFICATIONS</div>
+                <div class="certifications-section">
+                    <div class="cert-left">
+                        Full Stack Software Development Certificate –<br>
+                        Teach2Give | August 2024
+                    </div>
+                    <div class="cert-right">
+                        English (C2 Proficiency) Certificate –<br>
+                        EF SET | April 2024
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+    `;
+
+    // Open the CV content in a new window for printing/saving as PDF
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(cvContent);
+    printWindow.document.close();
     
-Contact Information:
-Email: michaelmwasame6@gmail.com
-Phone: +254743493619
-Location: Kutus, Kenya
-LinkedIn: linkedin.com/in/michaelmwasame
-GitHub: github.com/maximasprim
+    // Wait for content to load, then trigger print dialog
+    printWindow.onload = function() {
+        printWindow.print();
+        // Close the window after printing (optional)
+        printWindow.onafterprint = function() {
+            printWindow.close();
+        };
+    };
+    
+    showNotification('CV opened for download. Use "Save as PDF" in the print dialog.', 'success');
+}
 
-Education:
-- BS Computer Science, Kirinyaga University (Sep 2021 - April 2025)
-- Teach2Give Full Stack Development Bootcamp (May 2024 - August 2024)
+// Alternative method: Create a downloadable HTML file that can be converted to PDF
+function downloadCVAsHTML() {
+    const cvContent = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Michael Maxwell Mwasame - CV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .title {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 14px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .subsection {
+            margin-bottom: 15px;
+        }
+        .job-title, .education-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .company, .institution {
+            font-style: italic;
+            color: #666;
+        }
+        .date {
+            float: right;
+            color: #888;
+            font-size: 14px;
+        }
+        .skills-list, .projects-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .skill-category, .project-item {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        @media print {
+            body { margin: 0; padding: 15px; }
+            .contact-info { flex-direction: column; align-items: center; gap: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="name">Michael Maxwell Mwasame</div>
+        <div class="title">Full Stack Developer</div>
+        <div class="contact-info">
+            <div>📧 michaelmwasame6@gmail.com</div>
+            <div>📱 +254743493619</div>
+            <div>📍 Kutus, Kenya</div>
+            <div>💼 linkedin.com/in/michaelmwasame</div>
+            <div>🔗 github.com/maximasprim</div>
+        </div>
+    </div>
 
-Skills:
-- Languages: JavaScript, TypeScript, Python, PHP, HTML, CSS, SCSS
-- Frameworks: React.js, Node.js, Hono, Laravel, Drizzle ORM
-- Databases: PostgreSQL, MySQL, Supabase, Firebase
-- Tools: Git/GitHub, Docker, Vercel, Azure, Figma
+    <div class="section">
+        <div class="section-title">Education</div>
+        <div class="subsection">
+            <div class="education-title">BS Computer Science</div>
+            <div class="institution">Kirinyaga University</div>
+            <div class="date">Sep 2021 - April 2025</div>
+            <div style="clear: both;"></div>
+        </div>
+        <div class="subsection">
+            <div class="education-title">Teach2Give Full Stack Development Bootcamp</div>
+            <div class="date">May 2024 - August 2024</div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
 
-Experience:
-- Networking Engineer at Cyber Eyes Networks (Jan 2024 - Feb 2025)
-- Software Developer Trainee at Teach2Give (April 2024 - June 2024)
-- ICT Attaché at ICT Authority (May 2023 - August 2023)
+    <div class="section">
+        <div class="section-title">Technical Skills</div>
+        <div class="skills-list">
+            <div class="skill-category">
+                <strong>Languages:</strong><br>
+                JavaScript, TypeScript, Python, PHP, HTML, CSS, SCSS
+            </div>
+            <div class="skill-category">
+                <strong>Frameworks:</strong><br>
+                React.js, Node.js, Hono, Laravel, Drizzle ORM
+            </div>
+            <div class="skill-category">
+                <strong>Databases:</strong><br>
+                PostgreSQL, MySQL, Supabase, Firebase
+            </div>
+            <div class="skill-category">
+                <strong>Tools:</strong><br>
+                Git/GitHub, Docker, Vercel, Azure, Figma
+            </div>
+        </div>
+    </div>
 
-Projects:
-- AgroMart AI - Smart Agricultural Marketplace
-- Unified Property Management System
-- Smart AI Poultry System
-- Vehicle Rental System
-- Maximas AI Chatbot
-- Real-Time Chat Application
+    <div class="section">
+        <div class="section-title">Professional Experience</div>
+        <div class="subsection">
+            <div class="job-title">Networking Engineer</div>
+            <div class="company">Cyber Eyes Networks</div>
+            <div class="date">Jan 2024 - Feb 2025</div>
+            <div style="clear: both;"></div>
+        </div>
+        <div class="subsection">
+            <div class="job-title">Software Developer Trainee</div>
+            <div class="company">Teach2Give</div>
+            <div class="date">April 2024 - June 2024</div>
+            <div style="clear: both;"></div>
+        </div>
+        <div class="subsection">
+            <div class="job-title">ICT Attaché</div>
+            <div class="company">ICT Authority</div>
+            <div class="date">May 2023 - August 2023</div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
 
-Certifications:
-- Full Stack Software Development Certificate (Teach2Give, August 2024)
-- English C2 Proficiency Certificate (EF SET, April 2024)`;
+    <div class="section">
+        <div class="section-title">Key Projects</div>
+        <div class="projects-list">
+            <div class="project-item">
+                <strong>AgroMart AI</strong><br>
+                Smart Agricultural Marketplace
+            </div>
+            <div class="project-item">
+                <strong>Property Management System</strong><br>
+                Unified Property Management Solution
+            </div>
+            <div class="project-item">
+                <strong>Smart AI Poultry System</strong><br>
+                IoT-based Poultry Management
+            </div>
+            <div class="project-item">
+                <strong>Vehicle Rental System</strong><br>
+                Full-stack Rental Platform
+            </div>
+            <div class="project-item">
+                <strong>Maximas AI Chatbot</strong><br>
+                Intelligent Conversational AI
+            </div>
+            <div class="project-item">
+                <strong>Real-Time Chat App</strong><br>
+                WebSocket-based Communication
+            </div>
+        </div>
+    </div>
 
-    const blob = new Blob([cvContent], { type: 'text/plain' });
+    <div class="section">
+        <div class="section-title">Certifications</div>
+        <ul>
+            <li>Full Stack Software Development Certificate - Teach2Give (August 2024)</li>
+            <li>English C2 Proficiency Certificate - EF SET (April 2024)</li>
+        </ul>
+    </div>
+</body>
+</html>`;
+
+    const blob = new Blob([cvContent], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
-    
+    const link = document.createElement('a');
     link.href = url;
-    link.download = 'Michael_Maxwell_Mwasame_CV.txt';
+    link.download = 'Michael_Maxwell_Mwasame_CV.html';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     
-    showNotification('CV downloaded successfully!', 'success');
+    showNotification('CV downloaded as HTML. Open the file and print as PDF for best results.', 'success');
 }
 
 // Make downloadCV function global
