@@ -124,6 +124,25 @@
         }
 
         // Load all sections
+        // async function loadAllSections() {
+        //     const mainContent = document.getElementById('main-content');
+        //     const loadingPromises = Object.keys(sectionFiles).map(async (sectionName) => {
+        //         const sectionHtml = await loadSection(sectionName);
+        //         return sectionHtml;
+        //     });
+
+        //     try {
+        //         const sections = await Promise.all(loadingPromises);
+        //         mainContent.innerHTML = sections.join('');
+                
+        //         // Initialize functionality after sections are loaded
+        //         initializePortfolio();
+        //     } catch (error) {
+        //         console.error('Error loading sections:', error);
+        //         mainContent.innerHTML = '<div class="error-message">Failed to load portfolio sections</div>';
+        //     }
+        // }
+     // Load all sections
         async function loadAllSections() {
             const mainContent = document.getElementById('main-content');
             const loadingPromises = Object.keys(sectionFiles).map(async (sectionName) => {
@@ -135,8 +154,17 @@
                 const sections = await Promise.all(loadingPromises);
                 mainContent.innerHTML = sections.join('');
                 
-                // Initialize functionality after sections are loaded
-                initializePortfolio();
+                // IMPORTANT: Wait for DOM to update, then initialize carousel
+                setTimeout(() => {
+                    initializeCarousel();
+                    initializePortfolio();
+                    
+                    // Re-observe fade-in elements for newly loaded content
+                    document.querySelectorAll('.fade-in').forEach(el => {
+                        observer.observe(el);
+                    });
+                }, 200); // Increased delay to ensure DOM is fully ready
+                
             } catch (error) {
                 console.error('Error loading sections:', error);
                 mainContent.innerHTML = '<div class="error-message">Failed to load portfolio sections</div>';
@@ -145,20 +173,25 @@
 
         // Initialize portfolio functionality
         function initializePortfolio() {
-            // Re-run the original script functionality
-            if (typeof initializeCarousel === 'function') {
-                initializeCarousel();
-            }
+            console.log('Initializing portfolio functionality...');
             
-            // Re-observe fade-in elements
-            if (typeof observer !== 'undefined') {
-                document.querySelectorAll('.fade-in').forEach(el => {
-                    observer.observe(el);
-                });
-            }
-
             // Re-attach event listeners for dynamically loaded content
             initializeEventListeners();
+            
+            // Initialize counter animation
+            const statsSection = document.querySelector('.stats-grid');
+            if (statsSection) {
+                const statsObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateCounters();
+                            statsObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                statsObserver.observe(statsSection);
+            }
         }
 
         // Initialize event listeners for dynamic content
@@ -166,18 +199,63 @@
             // Contact form
             const contactForm = document.getElementById('contactForm');
             if (contactForm) {
+                contactForm.removeEventListener('submit', handleContactForm); // Remove existing
                 contactForm.addEventListener('submit', handleContactForm);
             }
 
-            // Carousel buttons
-            const nextBtn = document.getElementById('nextBtn');
-            const prevBtn = document.getElementById('prevBtn');
-            if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-            if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+            // Project card hover effects
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-15px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(-10px) scale(1)';
+                });
+            });
 
-            // Add other event listeners as needed
+            // Skill tag hover effects
+            document.querySelectorAll('.skill-tag').forEach(tag => {
+                tag.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1) rotate(2deg)';
+                });
+                
+                tag.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                });
+            });
         }
 
+        // Counter Animation for Stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent.replace(/\D/g, ''));
+                const increment = target / 100;
+                let current = 0;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        const value = Math.ceil(current);
+                        if (counter.textContent.includes('%')) {
+                            counter.textContent = value + '%';
+                        } else {
+                            counter.textContent = value + '+';
+                        }
+                        setTimeout(updateCounter, 20);
+                    } else {
+                        if (counter.textContent.includes('%')) {
+                            counter.textContent = target + '%';
+                        } else {
+                            counter.textContent = target + '+';
+                        }
+                    }
+                };
+                
+                updateCounter();
+            });
+        }
         // Contact form handler
         function handleContactForm(e) {
             e.preventDefault();
