@@ -1208,7 +1208,7 @@ const typingTexts = [
     'Artificial Intelligence Expert',
     'Problem Solver',
     'Tech Innovator',
-    'Founder & CEO - AGRILINK'
+    'Founder & CEO - AgriMus'
 ];
 
 let textIndex = 0;
